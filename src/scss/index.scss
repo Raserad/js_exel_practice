@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+@import "~normalize.css";
+
+@import "header";
+@import "toolbar";
+@import "formula";
+@import "table";
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Roboto";
+}
+
+.excel {
+    position: relative;
+    color: #888888;
+}
