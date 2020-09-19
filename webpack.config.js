@@ -14,7 +14,8 @@ const jsLoaders = () => {
     {
       loader: 'babel-loader',
       options: {
-        presets: ['@babel/preset-env']
+        presets: ['@babel/preset-env'],
+        plugins: ['@babel/plugin-proposal-class-properties']
       }
     }
   ]
@@ -29,7 +30,7 @@ const jsLoaders = () => {
 module.exports = {
   context: path.resolve(__dirname, 'src'),
   mode: 'development',
-  entry: ['@babel/polyfill', './index.js'],
+  entry: ['@babel/polyfill', '@/index.js'],
   output: {
     filename: filename('js'),
     path: path.resolve(__dirname, 'dist')
@@ -37,9 +38,9 @@ module.exports = {
   resolve: {
     extensions: ['.js'],
     alias: {
-      '': path.resolve(__dirname, 'src'),
-      'core': path.resolve(__dirname, 'src/core'),
-      'components': path.resolve(__dirname, 'src/components'),
+      '@': path.resolve(__dirname, 'src'),
+      '@core': path.resolve(__dirname, 'src/core'),
+      '@components': path.resolve(__dirname, 'src/components'),
     }
   },
   devtool: isDev ? 'source-map' : false,
