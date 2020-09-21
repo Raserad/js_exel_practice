@@ -35,6 +35,50 @@ class Dom {
   off(eventType, callback) {
     this.$el.removeEventListener(eventType, callback)
   }
+
+  attr(name, value = false) {
+    if (value) {
+      this.$el.setAttribute(name, value)
+      return this
+    }
+
+    return this.$el.getAttribute(name)
+  }
+
+  removeAttr(name) {
+    this.$el.removeAttribute(name)
+    return this
+  }
+
+  get data() {
+    return this.$el.dataset
+  }
+
+  closest(selector) {
+    return $(this.$el.closest(selector))
+  }
+
+  getCoords() {
+    return this.$el.getBoundingClientRect()
+  }
+
+  css(props) {
+    if (typeof props === 'string') {
+      return this.$el.style[props]
+    }
+
+    Object
+        .keys(props)
+        .forEach(key => this.$el.style[key] = props[key])
+    
+    return this
+  }
+
+  findAll(selector) {
+    return Array
+        .from(this.$el.querySelectorAll(selector))
+        .map(el => $(el))
+  }
 }
 
 export function $(selector) {

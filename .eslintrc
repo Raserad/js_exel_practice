@@ -7,6 +7,7 @@
     },
     "rules": {
         "semi": "off",
+        "no-debugger": "off",
         "arrow-parens": "off",
         "comma-dangle": "off",
         "linebreak-style": "off",
