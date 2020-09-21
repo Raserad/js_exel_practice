@@ -57,27 +57,22 @@ class Dom {
     return this.$el.getBoundingClientRect()
   }
 
-  css(props, value) {
-    if (typeof props === 'object') {
-      Object.keys(props).forEach(key => {
-        this.$el.style[key] = props[key]
-      })
-      
-      return this
+  css(props) {
+    if (typeof props === 'string') {
+      return this.$el.style[props]
     }
 
-    if (value) {
-      this.$el.style[props] = value
-      return this
-    }
-
-    return this.$el.style[props]
+    Object
+        .keys(props)
+        .forEach(key => this.$el.style[key] = props[key])
+    
+    return this
   }
 
   findAll(selector) {
-    const childs = []
-    this.$el.querySelectorAll(selector).forEach(el => childs.push($(el)))
-    return childs
+    return Array
+        .from(this.$el.querySelectorAll(selector))
+        .map(el => $(el))
   }
 }
 
