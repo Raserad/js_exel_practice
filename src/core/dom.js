@@ -36,13 +36,18 @@ class Dom {
     this.$el.removeEventListener(eventType, callback)
   }
 
-  attr(name, value = '') {
+  attr(name, value = false) {
     if (value) {
       this.$el.setAttribute(name, value)
       return this
     }
 
     return this.$el.getAttribute(name)
+  }
+
+  removeAttr(name) {
+    this.$el.removeAttribute(name)
+    return this
   }
 
   get data() {
