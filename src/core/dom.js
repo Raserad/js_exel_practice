@@ -50,10 +50,6 @@ class Dom {
     return this
   }
 
-  get data() {
-    return this.$el.dataset
-  }
-
   closest(selector) {
     return $(this.$el.closest(selector))
   }
@@ -74,10 +70,41 @@ class Dom {
     return this
   }
 
+  find(selector) {
+    return $(this.$el.querySelector(selector))
+  }
+
   findAll(selector) {
     return Array
         .from(this.$el.querySelectorAll(selector))
         .map(el => $(el))
+  }
+
+  addClass(className) {
+    this.$el.classList.add(className)
+    return this
+  }
+
+  removeClass(className) {
+    this.$el.classList.remove(className)
+    return this
+  }
+
+  id(parse) {
+    if (parse) {
+      const [row, col] = this.id().split(':')
+
+      return {
+        col: +col,
+        row: +row
+      }
+    }
+
+    return this.data.id
+  }
+
+  get data() {
+    return this.$el.dataset
   }
 }
 
@@ -86,7 +113,7 @@ export function $(selector) {
 }
 
 $.create = (tagName, classes = '') => {
-  const el = document.createElement(tagName)
-  el.classList.add(classes)
-  return $(el)
+  const $el = document.createElement(tagName)
+  $el.classList.add(classes)
+  return $($el)
 }
