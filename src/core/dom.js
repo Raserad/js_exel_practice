@@ -70,6 +70,11 @@ class Dom {
     return this
   }
 
+  focus() {
+    this.$el.focus()
+    return this
+  }
+
   find(selector) {
     return $(this.$el.querySelector(selector))
   }
@@ -109,7 +114,8 @@ class Dom {
 }
 
 export function $(selector) {
-  return new Dom(selector)
+  const $dom = new Dom(selector)
+  return $dom.$el ? $dom : false
 }
 
 $.create = (tagName, classes = '') => {

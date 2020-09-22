@@ -11,7 +11,7 @@ export class TableSelection {
     this.$current = $cell
 
     this.group.push($cell)
-    $cell.addClass(TableSelection.className)
+    $cell.focus().addClass(TableSelection.className)
   }
 
   selectGroup($cells) {
