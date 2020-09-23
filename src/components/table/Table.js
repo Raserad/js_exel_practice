@@ -46,9 +46,19 @@ export class Table extends ExcelComponent {
     })
   }
 
+  async resizeTable(event) {
+    try {
+      const data = await resizeHandler(this.$root, event)
+    
+      this.$dispatch({type: 'TABLE_RESIZE', data})
+    } catch (e) {
+      console.warn('Resize error', e)
+    }
+  }
+
   onMousedown(event) {
     if (shouldResize(event)) {
-      resizeHandler(this.$root, event)
+      this.resizeTable(event)
     }
     
     if (isCell(event)) {
