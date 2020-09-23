@@ -6,7 +6,6 @@ export class Header extends ExcelComponent {
   constructor($root, options) {
     super($root, {
       name: 'Header',
-      listeners: [],
       ...options
     })
   }

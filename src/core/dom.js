@@ -134,7 +134,7 @@ export function $(selector) {
 }
 
 $.create = (tagName, classes = '') => {
-  const $el = document.createElement(tagName)
-  $el.classList.add(classes)
-  return $($el)
+  const el = document.createElement(tagName)
+  el.classList.add(classes)
+  return $(el)
 }
