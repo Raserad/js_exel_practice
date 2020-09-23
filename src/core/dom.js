@@ -43,10 +43,12 @@ class Dom {
 
   on(eventType, callback) {
     this.$el.addEventListener(eventType, callback)
+    return this
   }
 
   off(eventType, callback) {
     this.$el.removeEventListener(eventType, callback)
+    return this
   }
 
   attr(name, value = false) {
