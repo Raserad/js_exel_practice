@@ -2,7 +2,8 @@ export function reducer(state, action) {
   switch (action.type) {
     case 'TABLE_RESIZE':
       const prevState = state.colState || {}
-      return {...state, colState: {...prevState, ...action.data}}
+      prevState[action.data.id] = action.data.value
+      return {...state, colState: prevState}
     default:
       return state
   }

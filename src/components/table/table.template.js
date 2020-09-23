@@ -3,9 +3,13 @@ const CODES = {
   Z: 90
 }
 
-function toColumn(char, col) {
+function toColumn(char, col, width) {
   return `
-    <div class="column" data-col="${col}" data-type="resizable">
+    <div class="column" 
+         data-col="${col}" 
+         data-type="resizable" 
+         style="width: ${width}"
+    >
       ${char}
       <div class="col-resize" data-resize="col"></div>
     </div>
@@ -43,14 +47,22 @@ function toChar(_, index) {
   return String.fromCharCode(CODES.A + index)
 }
 
-export function createTable(rowsCount = 15) {
+function getWidth(state, col) {
+  return `${state[col] || ''}px`
+}
+
+function toColumnWithState(state) {
+  return (char, col) => toColumn(char, col, getWidth(state.colState || {}, col))
+}
+
+export function createTable(rowsCount = 15, state = {}) {
   const colsCount = CODES.Z - CODES.A + 1
   const rows = []
 
   const cols = new Array(colsCount)
       .fill('')
       .map(toChar)
-      .map(toColumn)
+      .map(toColumnWithState(state))
       .join('')
 
   rows.push(createRow(null, cols))

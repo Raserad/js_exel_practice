@@ -8,11 +8,10 @@ import {Table} from '@components/table/Table'
 import {Toolbar} from '@components/toolbar/Toolbar'
 import '@/scss/index.scss'
 
-const store = createStore(reducer, {
-  colState: {}
-})
+const store = createStore(reducer, storage('excel-state'))
 
 store.subscribe(state => {
+  console.log('REsized!', state)
   storage('excel-state', state)
 })
 
