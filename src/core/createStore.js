@@ -18,7 +18,7 @@ export function createStore(reducer, initialState) {
       }
     },
     getState() {
-      return state
+      return JSON.parse(JSON.stringify(state))
     }
   }
 }

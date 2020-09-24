@@ -1,5 +1,6 @@
 import {$} from '@core/dom'
 import {Emitter} from '@core/Emitter'
+import {StoreSubscriber} from '@core/StoreSubscriber'
 
 export class Excel {
   constructor(selector, options) {
@@ -7,6 +8,7 @@ export class Excel {
     this.components = options.components || []
     this.emitter = new Emitter()
     this.store = options.store
+    this.subscriber = new StoreSubscriber(this.store)
   }
 
   getRoot() {
@@ -27,6 +29,8 @@ export class Excel {
       console.log(component)
       return component
     })
+
+    this.subscriber.subscribeComponents(this.components)
 
     return $root
   }

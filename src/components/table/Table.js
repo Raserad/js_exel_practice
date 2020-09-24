@@ -8,6 +8,7 @@ import {
   shouldResize, 
   isCell
 } from '@components/table/table.functions';
+import * as actions from '@redux/actions';
 import {$} from '@core/dom'
 
 export class Table extends ExcelComponent {
@@ -39,8 +40,11 @@ export class Table extends ExcelComponent {
     this.selectCell(this.$root.find('[data-id="0:0"]'))
 
     this.$on('formula:input', text => {
-      this.selection.$current.text(text)
+      const $cell = this.selection.$current
+      $cell.text(text)
+      this.updateCellTextInStore($cell)
     })
+
     this.$on('formula:done', () => {
       this.selection.$current.focus()
     })
@@ -49,8 +53,7 @@ export class Table extends ExcelComponent {
   async resizeTable(event) {
     try {
       const data = await resizeHandler(this.$root, event)
-    
-      this.$dispatch({type: 'TABLE_RESIZE', data})
+      this.$dispatch(actions.tableResize(data))
     } catch (e) {
       console.warn('Resize error', e)
     }
@@ -101,11 +104,20 @@ export class Table extends ExcelComponent {
   }
 
   onInput(event) {
-    this.$emit('table:input', $(event.target).text())
+    const $cell = $(event.target)
+    this.updateCellTextInStore($cell)
   }
 
   selectCell($cell) {
     this.selection.select($cell)
     this.$emit('table:select', $cell)
+  }
+
+  updateCellTextInStore($cell) {
+    const data = {
+      id: $cell.id(),
+      value: $cell.text()
+    }
+    this.$dispatch(actions.tableChangeText(data))
   }
 }

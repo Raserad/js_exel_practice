@@ -1,0 +1,2 @@
+export const TABLE_RESIZE = 'TABLE_RESIZE'
+export const TABLE_CHANGE_TEXT = 'TABLE_CHANGE_TEXT'

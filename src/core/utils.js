@@ -20,3 +20,10 @@ export function storage(key, data = null) {
   }
   localStorage.setItem(key, JSON.stringify(data))
 }
+
+export function isEqual(prev, current) {
+  if (typeof prev === 'object' && typeof current === 'object') {
+    return JSON.stringify(prev) === JSON.stringify(current)
+  }
+  return prev === current
+}
