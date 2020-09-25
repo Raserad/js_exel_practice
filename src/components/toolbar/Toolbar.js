@@ -1,40 +1,43 @@
-import {ExcelComponent} from '@core/ExcelComponent';
+import {ExcelStateComponent} from '@core/ExcelStateComponent';
+import {createToolbar} from '@components/toolbar/toolbar.template';
+import {$} from '@core/dom'
 
-export class Toolbar extends ExcelComponent {
+export class Toolbar extends ExcelStateComponent {
   static className = 'excel__toolbar'
 
   constructor($root, options) {
     super($root, {
       name: 'Toolbar',
+      listeners: ['click'],
       ...options
     })
   }
 
+  prepare() {
+    this.initState({
+      textAlign: 'left',
+      fontWeight: 'normal',
+      fontStyle: 'none',
+      textDecoration: 'normal'
+    })
+  }
+
+  get template() {
+    console.log('Current Toolbar State', this.state)
+    return createToolbar(this.state)
+  }
+
   toHtml() {
-    return `
-      <div class="button">
-          <i class="material-icons">format_align_left</i>
-      </div>
+    return this.template
+  }
 
-      <div class="button">
-          <i class="material-icons">format_align_center</i>
-      </div>
+  onClick(event) {
+    const $target = $(event.target)
 
-      <div class="button">
-          <i class="material-icons">format_align_right</i>
-      </div>
-
-      <div class="button">
-          <i class="material-icons">format_bold</i>
-      </div>
-
-      <div class="button">
-          <i class="material-icons">format_italic</i>
-      </div>
-
-      <div class="button">
-          <i class="material-icons">format_underline</i>
-      </div>
-    `
+    if ($target.data.type == 'button') {
+      const value = JSON.parse($target.data.value)
+      this.setState(value)
+      this.$emit('toolbar:applyStyle', value)
+    }
   }
 }

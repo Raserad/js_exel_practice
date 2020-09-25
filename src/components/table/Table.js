@@ -45,6 +45,11 @@ export class Table extends ExcelComponent {
       this.updateCellTextInStore($cell)
     })
 
+    this.$on('toolbar:applyStyle', style => {
+      const $cell = this.selection.$current
+      $cell.css(style)
+    })
+
     this.$on('formula:done', () => {
       this.selection.$current.focus()
     })
