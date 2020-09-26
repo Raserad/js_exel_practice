@@ -8,6 +8,7 @@ import {
   shouldResize, 
   isCell
 } from '@components/table/table.functions';
+import {defaultStyles} from '@/constants';
 import * as actions from '@redux/actions';
 import {$} from '@core/dom'
 
@@ -30,14 +31,17 @@ export class Table extends ExcelComponent {
     this.selection = new TableSelection()
   }
 
-  toHtml() {
+
+  get template() {
     return createTable(20, this.store.getState())
+  }
+
+  toHtml() {
+    return this.template
   }
 
   init() {
     super.init()
-    
-    this.selectCell(this.$root.find('[data-id="0:0"]'))
 
     this.$on('formula:input', text => {
       const $cell = this.selection.$current
@@ -45,14 +49,20 @@ export class Table extends ExcelComponent {
       this.updateCellTextInStore($cell)
     })
 
-    this.$on('toolbar:applyStyle', style => {
-      const $cell = this.selection.$current
-      $cell.css(style)
+    this.$on('toolbar:applyStyle', value => {
+      this.selection.applyStyle(value)
+
+      this.$dispatch(actions.applyStyle({
+        value,
+        ids: this.selection.selectedIds
+      }))
     })
 
     this.$on('formula:done', () => {
       this.selection.$current.focus()
     })
+
+    this.selectCell(this.$root.find('[data-id="0:0"]'))
   }
 
   async resizeTable(event) {
@@ -116,6 +126,8 @@ export class Table extends ExcelComponent {
   selectCell($cell) {
     this.selection.select($cell)
     this.$emit('table:select', $cell)
+    const styles = $cell.getStyles(Object.keys(defaultStyles))
+    this.$dispatch(actions.changeStyles(styles))
   }
 
   updateCellTextInStore($cell) {

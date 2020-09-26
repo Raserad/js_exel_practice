@@ -26,7 +26,6 @@ export class Excel {
       $el.html(component.toHtml())
       $root.append($el)
       
-      console.log(component)
       return component
     })
 

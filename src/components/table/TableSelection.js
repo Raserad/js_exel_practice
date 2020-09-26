@@ -14,6 +14,10 @@ export class TableSelection {
     $cell.focus().addClass(TableSelection.className)
   }
 
+  get selectedIds() {
+    return this.group.map($cell => $cell.id())
+  }
+
   selectGroup($cells) {
     this.unselectAll()
     
@@ -24,5 +28,10 @@ export class TableSelection {
   unselectAll() {
     this.group.forEach($el => $el.removeClass(TableSelection.className))
     this.group = []
+  }
+
+  applyStyle(style) {
+    const $cells = this.group
+    $cells.forEach($cell => $cell.css(style))
   }
 }

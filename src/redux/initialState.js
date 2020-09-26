@@ -1,9 +1,16 @@
 import {storage} from '@core/utils'
+import {defaultStyles} from '@/constants'
+import {defaultTitle} from '@/constants'
 
 const stored = storage('excel-state') || {}
 
 export const initialState = {
-  colState: stored.colState || {},
-  rowState: stored.rowState || {},
-  cellState: stored.cellState || {}
+  colState: {},
+  rowState: {},
+  dataState: {},
+  stylesState: {},
+  title: defaultTitle,
+  ...stored,
+  curentText: '',
+  currentStyles: defaultStyles
 }

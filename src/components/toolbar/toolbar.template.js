@@ -1,18 +1,14 @@
 
 function toButton(button) {
+  const value = JSON.stringify(button.value)
+  const active = button.active ? 'active' : ''
   const meta = `
       data-type="button"
-      data-value='${JSON.stringify(button.value)}'
+      data-value='${value}'
   `
   return `
-    <div class="button ${button.active ? 'active' : ''}" 
-         data-type="button"
-         ${meta}
-    >
-      <i 
-        class="material-icons"
-        ${meta}
-      >
+    <div class="button ${active}" data-type="button" ${meta}>
+      <i class="material-icons"${meta}>
         ${button.icon}
       </i>
     </div>
@@ -23,7 +19,7 @@ export function createToolbar(state) {
   const buttons = [
     {
       icon: 'format_align_left',
-      active: state.textAlign == 'left',
+      active: !state.textAlign || state.textAlign == 'left',
       value: {textAlign: 'left'}
     },
     {
