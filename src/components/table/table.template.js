@@ -50,6 +50,7 @@ function toCell(state, row) {
     const style = getStyle(state.stylesState, id)
     return `
       <div class="cell"
+            contenteditable="true"
             data-type="cell"
             data-col="${col}" 
             data-id="${id}"

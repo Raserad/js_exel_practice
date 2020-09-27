@@ -48,3 +48,7 @@ export function debounce(fn, wait) {
     }, wait)
   }
 }
+
+export function newPageId() {
+  return Date.now().toString()
+}

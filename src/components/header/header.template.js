@@ -3,12 +3,12 @@ export function createHeader(state) {
     <input type="text" class="input" value="${state.title}" />
 
     <div>
-        <div class="button">
-            <i class="material-icons">delete</i>
+        <div class="button" data-type="delete">
+            <i class="material-icons" data-type="delete">delete</i>
         </div>
 
-        <div class="button">
-            <i class="material-icons">exit_to_app</i>
+        <div class="button" data-type="exit">
+            <i class="material-icons" data-type="exit">exit_to_app</i>
         </div>
     </div>
   `
