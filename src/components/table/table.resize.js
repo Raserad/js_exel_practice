@@ -1,36 +1,44 @@
 import {$} from '@core/dom'
 
 export function resizeHandler($root, event) {
-  const $resizer = $(event.target)
-  const type = $resizer.data.resize
-  
-  if (!type) return
+  return new Promise((resolve) => {
+    const $resizer = $(event.target)
+    const type = $resizer.data.resize
+    
+    if (!type) return
 
-  const $parent = $resizer.closest('[data-type="resizable"]')
-  const coords = $parent.getCoords()
+    const $parent = $resizer.closest('[data-type="resizable"]')
+    const coords = $parent.getCoords()
 
-  prepareResizer($resizer, type)
+    prepareResizer($resizer, type)
 
-  let value = false
-  document.onmousemove = e => {
-    if (type == 'col') {
-      const delta = e.pageX - coords.right
-      value = coords.width + delta
-      $resizer.css({right: -delta + 'px'})
-    } else {
-      const delta = e.pageY - coords.bottom
-      value = coords.height + delta
-      $resizer.css({bottom: -delta + 'px'})
+    let value = false
+    document.onmousemove = e => {
+      if (type == 'col') {
+        const delta = e.pageX - coords.right
+        value = coords.width + delta
+        $resizer.css({right: -delta + 'px'})
+      } else {
+        const delta = e.pageY - coords.bottom
+        value = coords.height + delta
+        $resizer.css({bottom: -delta + 'px'})
+      }
     }
-  }
 
-  document.onmouseup = () => {
-    $resizer.removeAttr('style')
-    document.onmousemove = null
-    document.onmouseup = null
+    document.onmouseup = () => {
+      $resizer.removeAttr('style')
+      document.onmousemove = null
+      document.onmouseup = null
 
-    clearResizer(type, $root, $parent, value)
-  }
+      resolve({
+        id: $parent.data[type],
+        type,
+        value
+      })
+
+      clearResizer(type, $root, $parent, value)
+    }
+  })
 }
 
 function prepareResizer($resizer, type) {

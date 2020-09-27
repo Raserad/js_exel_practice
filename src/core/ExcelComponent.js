@@ -7,7 +7,9 @@ export class ExcelComponent extends DomListener {
     super($root, options.listeners)
     this.name = options.name
     this.emitter = options.emitter
+    this.store = options.store
     this.subscriptions = []
+    this.storeSubscribe = options.subscribe || []
 
     this.prepare()
   }
@@ -34,5 +36,15 @@ export class ExcelComponent extends DomListener {
   $on(event, callback) {
     const subscription = this.emitter.subscribe(event, callback)
     this.subscriptions.push(subscription)
+  }
+
+  $dispatch(action) {
+    this.store.dispatch(action)
+  }
+
+  storeChanged(state) {}
+
+  isWatching(key) {
+    return this.storeSubscribe.includes(key)
   }
 }
