@@ -6,16 +6,17 @@ import {Toolbar} from '@components/toolbar/Toolbar'
 import {createStore} from '@core/createStore'
 import {reducer} from '@redux/reducer'
 import {getInitialState} from '@redux/initialState'
-import {storage, debounce, newPageId} from '@core/utils'
+import {storage, debounce, currentTime} from '@core/utils'
 import {Page} from '@core/Page'
+import {updateOpenTime} from '@/redux/actions'
 
 function pageName(id) {
   return `excel:${id}`
 }
 
 export class ExcelPage extends Page {
-  getRoot() {
-    const id = this.params[0] ? this.params[0] : newPageId()
+  prepareComponents() {
+    const id = this.params[0] ? this.params[0] : currentTime()
 
     const name = pageName(id)
 
@@ -27,11 +28,18 @@ export class ExcelPage extends Page {
 
     store.subscribe(storageListener)
 
+    store.dispatch(updateOpenTime({
+      openTime: new Date().toJSON()
+    }))
+
     this.excel = new Excel({
       components: [Header, Toolbar, Formula, Table],
       store
     })
-
+  }
+  
+  getRoot() {
+    this.prepareComponents()
     return this.excel.getRoot()
   }
 

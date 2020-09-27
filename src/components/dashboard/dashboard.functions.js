@@ -15,6 +15,7 @@ export function getList() {
       })
       .map(storage => ({
         id: storage.id,
-        title: storage.title
+        title: storage.title,
+        openTime: storage.openTime
       }))
 }

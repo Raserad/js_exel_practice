@@ -1,32 +1,13 @@
-import {newPageId} from '@core/utils'
-
-function getDate(id) {
-  const monthNames = [
-    'January', 
-    'February', 
-    'March', 
-    'April', 
-    'May', 
-    'June',
-    'July', 
-    'August', 
-    'September', 
-    'October', 
-    'November', 
-    'December'
-  ]
-  const date = new Date(parseInt(id))
-  const month = monthNames[date.getMonth()]
-  const day = String(date.getDate()).padStart(2, '0')
-  const year = date.getFullYear()
-  return `${day} ${month} ${year}`
-}
+import {currentTime} from '@core/utils'
 
 function toListItem(item) {
   return `
     <li class="db__record">
       <a href="#excel/${item.id}">${item.title}</a>
-      <strong>${getDate(item.id)}</strong>
+      <strong>
+        ${new Date(item.openTime).toLocaleDateString()}
+        ${new Date(item.openTime).toLocaleTimeString()}
+      </strong>
     </li>
   `
 }
@@ -61,7 +42,7 @@ export function createDashboard(list) {
 
     <div class="db__new">
       <div class="db__view">
-          <a href="#excel/${newPageId()}" class="db__create">
+          <a href="#excel/${currentTime()}" class="db__create">
               New <br /> table
           </a>
       </div>

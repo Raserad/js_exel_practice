@@ -3,7 +3,8 @@ import {
   TABLE_CHANGE_TEXT, 
   APPLY_STYLE,
   CHANGE_STYLES,
-  CHANGE_TITLE
+  CHANGE_TITLE, 
+  UPDATE_TIME
 } from './types'
 
 export function reducer(state, action) {
@@ -47,6 +48,11 @@ export function reducer(state, action) {
       return {
         ...state,
         title: action.text
+      }
+    case UPDATE_TIME:
+      return {
+        ...state,
+        ...action.data
       }
     default:
       return state

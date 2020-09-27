@@ -49,6 +49,6 @@ export function debounce(fn, wait) {
   }
 }
 
-export function newPageId() {
+export function currentTime() {
   return Date.now().toString()
 }
