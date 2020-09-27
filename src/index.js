@@ -6,14 +6,16 @@ import {Toolbar} from '@components/toolbar/Toolbar'
 import {createStore} from '@core/createStore'
 import {reducer} from '@redux/reducer'
 import {initialState} from '@redux/initialState'
-import {storage} from '@core/utils'
+import {storage, debounce} from '@core/utils'
 import '@/scss/index.scss'
 
 const store = createStore(reducer, initialState)
 
-store.subscribe(state => {
+const storageListener = debounce(state => {
   storage('excel-state', state)
-})
+}, 300)
+
+store.subscribe(storageListener)
 
 const excel = new Excel('#app', {
   components: [Header, Toolbar, Formula, Table],

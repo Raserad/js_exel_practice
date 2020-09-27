@@ -15,7 +15,7 @@ class Dom {
   }
 
   text(text) {
-    if (typeof text === 'string') {
+    if (typeof text === 'string' || typeof text === 'number') {
       this.$el.textContent = text
       return this
     }
@@ -51,8 +51,8 @@ class Dom {
     return this
   }
 
-  attr(name, value = false) {
-    if (value) {
+  attr(name, value) {
+    if (typeof value !== 'undefined') {
       this.$el.setAttribute(name, value)
       return this
     }

@@ -37,3 +37,14 @@ export function toInlineStyles(styles) {
       .map(key => `${camelToDashCase(key)}: ${styles[key]}`)
       .join(';')
 }
+
+export function debounce(fn, wait) {
+  let timeout = false
+  return function(...args) {
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
+      clearTimeout(timeout)
+      fn(...args)
+    }, wait)
+  }
+}

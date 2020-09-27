@@ -1,15 +1,18 @@
-import {ExcelComponent} from '@core/ExcelComponent';
-import {TableSelection} from '@components/table/TableSelection';
-import {createTable} from '@components/table/table.template';
+import {ExcelComponent} from '@core/ExcelComponent'
+import {TableSelection} from '@components/table/TableSelection'
+import {createTable} from '@components/table/table.template'
 import {resizeHandler} from '@components/table/table.resize'
+import {makeEditable, isEditable} from '@components/table/table.editable'
 import {
   matrix, 
   nextSelector, 
   shouldResize, 
-  isCell
-} from '@components/table/table.functions';
-import {defaultStyles} from '@/constants';
-import * as actions from '@redux/actions';
+  isCell,
+  isFocused
+} from '@components/table/table.functions'
+import {defaultStyles} from '@/constants'
+import * as actions from '@redux/actions'
+import {parse} from '@core/parse'
 import {$} from '@core/dom'
 
 export class Table extends ExcelComponent {
@@ -20,7 +23,6 @@ export class Table extends ExcelComponent {
       name: 'Table',
       listeners: [
         'mousedown',
-        'keydown',
         'input'
       ],
       ...options
@@ -29,6 +31,7 @@ export class Table extends ExcelComponent {
 
   prepare() {
     this.selection = new TableSelection()
+    document.onkeydown = this.onKeydown.bind(this)
   }
 
 
@@ -43,10 +46,11 @@ export class Table extends ExcelComponent {
   init() {
     super.init()
 
-    this.$on('formula:input', text => {
-      const $cell = this.selection.$current
-      $cell.text(text)
-      this.updateCellTextInStore($cell)
+    this.$on('formula:input', value => {
+      this.selection.$current
+          .attr('data-value', value)
+          .text(parse(value))
+      this.updateCellTextInStore(value)
     })
 
     this.$on('toolbar:applyStyle', value => {
@@ -59,7 +63,9 @@ export class Table extends ExcelComponent {
     })
 
     this.$on('formula:done', () => {
-      this.selection.$current.focus()
+      const $cell = this.selection.$current
+      makeEditable($cell)
+      $cell.focus()
     })
 
     this.selectCell(this.$root.find('[data-id="0:0"]'))
@@ -94,16 +100,22 @@ export class Table extends ExcelComponent {
   }
 
   onKeydown(event) {
-    const keys = [
+    const arrowKeys = [
       'ArrowUp',
       'ArrowDown',
       'ArrowLeft',
-      'ArrowRight',
+      'ArrowRight'
+    ]
+
+    const keys = [
+      ...arrowKeys,
       'Enter',
       'Tab'
     ]
 
     const {key} = event
+
+    if (isFocused(document) && arrowKeys.includes(key)) return
 
     if (keys.includes(key)) {
       event.preventDefault()
@@ -115,12 +127,19 @@ export class Table extends ExcelComponent {
       if ($next) {
         this.selectCell($next)
       }
+    } else {
+      const $cell = this.selection.$current
+      if (!isEditable($cell)) {
+        $cell.text('')
+      }
+      makeEditable($cell)
     }
   }
 
   onInput(event) {
-    const $cell = $(event.target)
-    this.updateCellTextInStore($cell)
+    const $target = $(event.target)
+    $target.attr('data-value', $target.text())
+    this.updateCellTextInStore($target.text())
   }
 
   selectCell($cell) {
@@ -130,10 +149,10 @@ export class Table extends ExcelComponent {
     this.$dispatch(actions.changeStyles(styles))
   }
 
-  updateCellTextInStore($cell) {
+  updateCellTextInStore(value) {
     const data = {
-      id: $cell.id(),
-      value: $cell.text()
+      id: this.selection.$current.id(),
+      value: value
     }
     this.$dispatch(actions.tableChangeText(data))
   }

@@ -21,7 +21,7 @@ export class Formula extends ExcelComponent {
     this.$formula = this.$root.find(`[data-type="formula"]`)
 
     this.$on('table:select', $cell => {
-      this.$formula.text($cell.text())
+      this.$formula.text($cell.data.value)
     })
   }
 
@@ -34,6 +34,8 @@ export class Formula extends ExcelComponent {
   }
 
   onKeydown(event) {
+    event.stopPropagation()
+    
     const keys = ['Enter', 'Tab']
     if (keys.includes(event.key)) {
       event.preventDefault()

@@ -7,7 +7,6 @@ import {
 } from './types'
 
 export function reducer(state, action) {
-  console.log('Current action', action)
   switch (action.type) {
     case TABLE_RESIZE:
       const field = action.data.type == 'col' ? 'colState' : 'rowState'

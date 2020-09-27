@@ -1,4 +1,5 @@
 import {toInlineStyles} from '@core/utils'
+import {parse} from '@core/parse'
 
 const CODES = {
   A: 65,
@@ -20,7 +21,7 @@ function getWidth(state, col) {
   return `${state[col] || DEFAULT_WIDTH}px`
 }
 
-function getText(state, id) {
+function getData(state, id) {
   return state[id] || ''
 }
 
@@ -45,15 +46,16 @@ function toCell(state, row) {
   return function(_, col) {
     const id = `${row}:${col}`
     const width = getWidth(state.colState, col)
-    const text = getText(state.dataState, id)
+    const data = getData(state.dataState, id)
     const style = getStyle(state.stylesState, id)
     return `
-      <div class="cell" contenteditable
+      <div class="cell"
             data-type="cell"
             data-col="${col}" 
             data-id="${id}"
+            data-value="${data}"
             style="width: ${width}; ${style}" >
-      ${text}
+      ${parse(data)}
       </div>
     `
   }

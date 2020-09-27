@@ -1,3 +1,5 @@
+import {makeEditable, clearEditable} from '@components/table/table.editable'
+
 export class TableSelection {
   static className = 'selected'
 
@@ -7,11 +9,17 @@ export class TableSelection {
   }
 
   select($cell) {
+    const editable = this.$current && this.$current.id() == $cell.id()
+    
     this.unselectAll()
     this.$current = $cell
 
+    $cell.addClass(TableSelection.className)
     this.group.push($cell)
-    $cell.focus().addClass(TableSelection.className)
+    
+    if (editable) {
+      makeEditable($cell)
+    }
   }
 
   get selectedIds() {
@@ -26,7 +34,10 @@ export class TableSelection {
   }
 
   unselectAll() {
-    this.group.forEach($el => $el.removeClass(TableSelection.className))
+    this.group.forEach($el => {
+      clearEditable($el)
+      $el.removeClass(TableSelection.className)
+    })
     this.group = []
   }
 
