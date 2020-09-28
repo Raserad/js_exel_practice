@@ -1,10 +1,5 @@
 import {range} from '@core/utils';
 
-export function isFocused(document) {
-  const element = document.activeElement
-  return element.isContentEditable || element.tagName == 'INPUT'
-}
-
 export function shouldResize(event) {
   return event.target.dataset.resize
 }

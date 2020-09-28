@@ -2,13 +2,11 @@ import {ExcelComponent} from '@core/ExcelComponent'
 import {TableSelection} from '@components/table/TableSelection'
 import {createTable} from '@components/table/table.template'
 import {resizeHandler} from '@components/table/table.resize'
-import {makeEditable, isEditable} from '@components/table/table.editable'
 import {
   matrix, 
   nextSelector, 
   shouldResize, 
-  isCell,
-  isFocused
+  isCell
 } from '@components/table/table.functions'
 import {defaultStyles} from '@/constants'
 import * as actions from '@redux/actions'
@@ -23,7 +21,8 @@ export class Table extends ExcelComponent {
       name: 'Table',
       listeners: [
         'mousedown',
-        'input'
+        'input',
+        'keydown'
       ],
       ...options
     })
@@ -31,7 +30,6 @@ export class Table extends ExcelComponent {
 
   prepare() {
     this.selection = new TableSelection()
-    document.onkeydown = this.onKeydown.bind(this)
   }
 
 
@@ -64,7 +62,6 @@ export class Table extends ExcelComponent {
 
     this.$on('formula:done', () => {
       const $cell = this.selection.$current
-      makeEditable($cell)
       $cell.focus()
     })
 
@@ -100,22 +97,16 @@ export class Table extends ExcelComponent {
   }
 
   onKeydown(event) {
-    const arrowKeys = [
+    const keys = [
       'ArrowUp',
       'ArrowDown',
       'ArrowLeft',
-      'ArrowRight'
-    ]
-
-    const keys = [
-      ...arrowKeys,
+      'ArrowRight',
       'Enter',
       'Tab'
     ]
 
     const {key} = event
-
-    if (isFocused(document) && arrowKeys.includes(key)) return
 
     if (keys.includes(key)) {
       event.preventDefault()
@@ -127,12 +118,6 @@ export class Table extends ExcelComponent {
       if ($next) {
         this.selectCell($next)
       }
-    } else {
-      const $cell = this.selection.$current
-      if (!isEditable($cell)) {
-        $cell.text('')
-      }
-      makeEditable($cell)
     }
   }
 

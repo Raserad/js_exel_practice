@@ -34,8 +34,6 @@ export class Formula extends ExcelComponent {
   }
 
   onKeydown(event) {
-    event.stopPropagation()
-    
     const keys = ['Enter', 'Tab']
     if (keys.includes(event.key)) {
       event.preventDefault()
